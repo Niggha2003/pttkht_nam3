@@ -19,7 +19,6 @@ async function main() {
     await mongoose.connect(mongoDB);
     console.log("Debug: Run query");
     await createAccountTraining();
-    await createAccount();
     console.log("Debug: Closing mongoose");
     mongoose.connection.close();
 }

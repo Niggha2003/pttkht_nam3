@@ -8,4 +8,4 @@ const AccountTrainingSchema = new Schema({
     password: {type: String, required: true}
 })
 
-module.exports = Account.discriminator('AccountTraining', AccountTrainingSchema)
+module.exports = mongoose.model('AccountTraining', AccountTrainingSchema)
