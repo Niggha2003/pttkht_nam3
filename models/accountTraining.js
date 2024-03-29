@@ -11,4 +11,8 @@ const AccountTrainingSchema = new Schema({
     },
 })
 
+AccountTrainingSchema.virtual('url').get(function() {
+    return `/data/account/${this.id}`;
+})
+
 module.exports = Account.discriminator('account_training', AccountTrainingSchema)
