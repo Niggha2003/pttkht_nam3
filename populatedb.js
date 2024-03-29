@@ -1,6 +1,6 @@
-const AccountTraining = require('./models/accountTraining');
-const AccountEmployee = require('./models/accountEmployee');
-const Person = require('./models/person');
+const AccountTraining = require('./models/accountModels/accountTraining');
+const AccountEmployee = require('./models/accountModels/accountEmployee');
+const Person = require('./models/trainingSystemModels/person');
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');

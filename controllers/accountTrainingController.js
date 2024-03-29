@@ -1,4 +1,4 @@
-const AccountTraining = require('../models/accountTraining');
+const AccountTraining = require('../models/accountModels/accountTraining');
 const connectCreate = require('../routes/connect');
 
 const asyncHandler = require('express-async-handler');

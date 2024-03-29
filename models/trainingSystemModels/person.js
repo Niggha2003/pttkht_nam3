@@ -24,7 +24,7 @@ const personSchema = new Schema({
                 message: `Mỗi giá trị 'Chứng chỉ khác' phải có các key 'certificateName' và 'level'.`
             }
         }],
-        
+        required: true,
     },
     address: {type: String, required: true},
     associateContact: {
