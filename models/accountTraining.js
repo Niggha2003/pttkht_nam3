@@ -7,7 +7,7 @@ const AccountTrainingSchema = new Schema({
     role: {
         type: String, 
         required: true,
-        enum: ['s', 't']
+        enum: ['student', 'teacher']
     },
 })
 

@@ -13,9 +13,31 @@ const personSchema = new Schema({
         // cơ sở, phổ thông, cao đẳng, đại học
         enum: ["cs", "pt", "cd" ,"dh"]
     },
-    anotherCertificate: {type: Schema.Types.ObjectId, ref: "Certificate"},
+    anotherCertificate: {
+        type: [{
+            type: Object,
+            validate: {
+                validator: function(obj) {
+                    // Kiểm tra các key bắt buộc
+                    return obj.hasOwnProperty('certificateName') && obj.hasOwnProperty('level');
+                },
+                message: `Mỗi giá trị 'Chứng chỉ khác' phải có các key 'certificateName' và 'level'.`
+            }
+        }],
+        
+    },
     address: {type: String, required: true},
-    associateContact:{type: Schema.Types.ObjectId, ref:"associateContact"},
+    associateContact: {
+        type: Object, 
+        required: true,
+        validate: {
+            validator: function(obj) {
+                // Kiểm tra các key bắt buộc
+                return obj.hasOwnProperty('name') && obj.hasOwnProperty('relation') && obj.hasOwnProperty('phoneNumber');
+            },
+            message: `Mỗi giá trị 'Người liên hệ' phải có các key 'name' và 'relation' và 'phoneNumber'.`
+        }
+    },
     identifyCard: {type: String, required: true},
 });
 

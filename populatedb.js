@@ -1,8 +1,6 @@
 const AccountTraining = require('./models/accountTraining');
 const AccountEmployee = require('./models/accountEmployee');
 const Person = require('./models/person');
-const AssociateContact = require('./models/associateContact');
-const Certificate = require('./models/certificate');
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
@@ -30,8 +28,6 @@ async function main() {
 
     console.log("Debug: Run query");
 
-    await createAnotherCertificate();
-    await createAssociateContact();
     await createPerson();
     await createAccountTraining();
     await createAccountEmployee();
@@ -58,7 +54,7 @@ async function accountTrainingCreate(index,accountCode, password, role, person) 
 async function createAccountTraining() {
     console.log("Adding account training");
     await Promise.all([
-        accountTrainingCreate(0, "715105165", md5Hash("1"), "s", persons[0]),
+        accountTrainingCreate(0, "715105165", md5Hash("1"), "student", persons[0]),
     ])
 }
 // kết thúc khởi tạo tài khoản đào tạo
@@ -83,40 +79,6 @@ async function createAccountEmployee() {
 
 
 //*** khởi tạo thông tin người dùng
-
-/// khởi tạo chứng chỉ khác
-
-/// kết thúc khởi tạo chứng chỉ khác
-    async function anotherCertificateCreate(index, certificateName, level) {
-        const certificate = new Certificate({certificateName: certificateName, level: level});
-        await certificate.save();
-        certificates[index] = certificate;
-    }
-
-    async function createAnotherCertificate() {
-        await Promise.all([
-            anotherCertificateCreate(0, "ielts", "6.5"),
-            anotherCertificateCreate(1, "Toeic", "6.5"),
-            anotherCertificateCreate(2, "Tiếng Nhật", "N2"),
-        ])
-    }
-/// khởi tạo người liên hệ
-    async function associateContactCreate(index, name, relation, phoneNumber) {
-        const associateContact = new AssociateContact({name : name, relation : relation, phoneNumber : phoneNumber});
-        await associateContact.save();
-        associateContacts[index] = associateContact;
-    }
-
-    async function createAssociateContact() {
-        await Promise.all([
-            associateContactCreate(0, "Nguyễn văn Tự", "Bố", "03824324324"),
-            associateContactCreate(1, "Nguyễn văn Hoàng", "Mẹ", "09334324324"),
-            associateContactCreate(2, "Nguyễn Hồng Nhan", "Bà", "0555324324"),
-        ])
-    }
-/// kết thúc khởi tạo người liên hệ
-
-
     async function personCreate(index, name, birthDate, photo, phoneNumber, academicLevel, anotherCertificate, address, associateContact, identifyCard) {
         const personDetails = {
             name, birthDate, photo, phoneNumber, academicLevel, anotherCertificate, address, associateContact, identifyCard
@@ -131,9 +93,9 @@ async function createAccountEmployee() {
     async function createPerson() {
         console.log("Adding Person");
         await Promise.all([
-            personCreate(0, "Hoàng", new Date("2000-02-19"),"fdjsiofjids", "030324324", "dh", certificates[0], "Hà Nội", associateContacts[0], "fdjisojfds" ),
-            personCreate(1, "Nam", new Date("2003-05-25"),"fdjsiofjids", "04732894", "dh", certificates[1], "Hà Nội", associateContacts[1], "fdjisojfds" ),
-            personCreate(2, "Minh", new Date("2001-07-30"),"fdjsiofjids", "03498324", "dh", certificates[2], "Hà Nội", associateContacts[2], "fdjisojfds" ),
+            personCreate(0, "Hoàng", new Date("2000-02-19"),"fdjsiofjids", "030324324", "dh", [{name: "ielts", level: "6.5"}], "Hà Nội", {name: "Nguyễn văn Tự", relation: "Bố", phoneNumber: "03824324324"}, "fdjisojfds" ),
+            personCreate(1, "Nam", new Date("2003-05-25"),"fdjsiofjids", "04732894", "dh",[], "Hà Nội", {name: "Nguyễn văn Hoàng", relation: "Mẹ", phoneNumber: "09334324324"}, "fdjisojfds" ),
+            personCreate(2, "Minh", new Date("2001-07-30"),"fdjsiofjids", "03498324", "dh", [], "Hà Nội", {name: "Nguyễn Hồng Nhan", relation: "Bà", phoneNumber: "0555324324"}, "fdjisojfds" ),
         ])
     }
 // kết thúc khởi tạo thông tin người dùng
