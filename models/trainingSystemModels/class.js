@@ -25,6 +25,13 @@ const classSchema = new Schema({
             message: `Mỗi giá trị 'Tài liệu' phải có các key 'name' và 'author' và 'url'.`
         }
     }]
+   },
+   mark: {
+    type: [{
+        type: Schema.Types.ObjectId,
+        ref: "mark",
+    }],
+    required: true,
    }
 })
 
