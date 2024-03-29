@@ -7,12 +7,7 @@ const AccountTrainingSchema = new Schema({
     role: {
         type: String, 
         required: true,
-        validate: {
-            validator: function(v) {
-              return v === 'g' || v === 's';
-            },
-            message: props => `${props.value} không hợp lệ. Chỉ chấp nhận giá trị "g" hoặc "s".`
-        }
+        enum: ['s', 't']
     },
 })
 

@@ -9,12 +9,7 @@ const AccountEmployeeSchema = new Schema({
     role: {
         type: String, 
         required: true,
-        validate: {
-            validator: function(v) {
-              return roles.includes(v);
-            },
-            message: props => `${props.value} không hợp lệ. Chỉ chấp nhận giá trị thuộc vào ${roles}`
-        }
+        enum: ['training','signing','ordering','working','admin'],
     },
 })
 
