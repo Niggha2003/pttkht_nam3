@@ -10,6 +10,7 @@ const trainingCourseSchema = new Schema({
         ref: "student",
     }],
     required: true,
+    default: []
    },
    class: {
     type: [{
@@ -17,6 +18,7 @@ const trainingCourseSchema = new Schema({
         ref: "class",
     }],
     required: true,
+    default: []
    }
 })
 

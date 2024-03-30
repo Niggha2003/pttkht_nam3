@@ -8,6 +8,7 @@ const teacherSchema = new Schema({
             ref: 'class'
         }],
         required: true,
+        default: []
     },
     accountTraining: {type: Schema.Types.ObjectId, ref: 'accountTraining'},
     subject: {type: String, required: true},

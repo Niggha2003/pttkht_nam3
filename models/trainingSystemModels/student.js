@@ -8,8 +8,10 @@ const studentSchema = new Schema({
             ref: 'trainingCourse'
         }],
         required: true,
+        default: []
     },
-    accountTraining: {type: Schema.Types.ObjectId, ref: 'accountTraining'}
+    accountTraining: {type: Schema.Types.ObjectId, ref: 'accountTraining'},
+    worker: {type: Schema.Types.ObjectId, ref: 'worker', required: true},
 })
 
 studentSchema.virtual('url').get(function() {
