@@ -3,8 +3,6 @@ const Schema = mongoose.Schema;
 
 const workerSchema = new Schema({
     isMarried : {type: 'boolean', required: true},
-    order: {type: Schema.Types.ObjectId, ref:'order', required: true},
-    student: {type: Schema.Types.ObjectId, ref: 'student', required: true},
 })
 
 workerSchema.virtual('url').get(function() {

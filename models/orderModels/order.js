@@ -16,16 +16,34 @@ const orderSchema = new Schema({
         }
     },
     ageRequire: {type: Number, required: true},
+    heightRequire: {
+        type: Object,
+        required: true,
+        validate: {
+            validator: function(obj) {
+                return obj.hasOwnProperty('female') && obj.hasOwnProperty('male') 
+            },
+            message: "Cần nhập cả giá trị chiều cao và giới tính"
+        }
+    },
+    weightRequire: {
+        type: Object,
+        required: true,
+        validate: {
+            validator: function(obj) {
+                return obj.hasOwnProperty('female') && obj.hasOwnProperty('male') 
+            },
+            message: "Cần nhập cả giá trị cân nặng và giới tính"
+        }
+    },
     bodyRequire: {
         type: Object,
         required: true,
         validate: {
             validator: function(obj) {
-                return obj.hasOwnProperty('height') && obj.hasOwnProperty('weight') 
-                && obj.hasOwnProperty('eyesight') && obj.hasOwnProperty('isSmoke') 
-                && obj.hasOwnProperty('isMarried');
+                return  obj.hasOwnProperty('eyesight') && obj.hasOwnProperty('isSmoke') 
             },
-            message: "Cần nhập cả giá trị cân nặng và chiều cao"
+            message: "Cần nhập các giá trị cơ thể đầy đủ"
         }
     },
     academicLevelRequire: {
@@ -48,12 +66,11 @@ const orderSchema = new Schema({
     workers: {
         type: [{
             type: Schema.Types.ObjectId, 
-            ref: 'worker'
+            ref: 'worker',
         }],
         required: true,
         default: []
     }
-
 })
 
 orderSchema.virtual('url').get(function() {

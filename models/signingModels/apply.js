@@ -12,7 +12,7 @@ const applySchema = new Schema({
         required: true,
         enum: ['hct', 'halt', 'ipg', 'sent', 'pass', 'fail' ],
         // haven't contact, dừng, inprogress, đã gửi, đạt yêu cầu, không đạt yêu cầu
-        default: "uct",
+        default: "hct",
     }
 })
 

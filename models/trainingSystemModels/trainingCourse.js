@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const trainingCourseSchema = new Schema({
    name: {type: String, required: true},
    description: {type: String, required: true},
-   student: {
+   students: {
     type: [{
         type: Schema.Types.ObjectId,
         ref: "student",
@@ -12,10 +12,10 @@ const trainingCourseSchema = new Schema({
     required: true,
     default: []
    },
-   class: {
+   trainingClasses: {
     type: [{
         type: Schema.Types.ObjectId,
-        ref: "class",
+        ref: "trainingClass",
     }],
     required: true,
     default: []

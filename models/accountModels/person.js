@@ -13,7 +13,7 @@ const personSchema = new Schema({
         // cơ sở, phổ thông, cao đẳng, đại học
         enum: ["cs", "pt", "cd" ,"dh"]
     },
-    anotherCertificate: {
+    anotherCertificates: {
         type: [{
             type: Object,
             validate: {
@@ -24,6 +24,7 @@ const personSchema = new Schema({
                 message: `Mỗi giá trị 'Chứng chỉ khác' phải có các key 'certificateName' và 'level'.`
             }
         }],
+        default : [],
         required: true,
     },
     address: {type: String, required: true},
