@@ -1,4 +1,4 @@
-const Worker = require("../../models/trainingSystemModels/worker");
+const Worker = require("../../models/workingModels/worker");
 const asyncHandler = require("express-async-handler");
 
 // Display list of all workers.

@@ -6,27 +6,27 @@ const trainingCourse_controller = require("../../controllers/trainingSystemContr
 /// trainingCourse routes ///
 
 // GET request for creating a trainingCourse. NOTE This must come before routes that display trainingCourse (uses id).
-router.get("/trainingCourse/create", trainingCourse_controller.trainingCourse_create_get);
+router.get("/create", trainingCourse_controller.trainingCourse_create_get);
 
 // POST request for creating trainingCourse.
-router.post("/trainingCourse/create", trainingCourse_controller.trainingCourse_create_post);
+router.post("/create", trainingCourse_controller.trainingCourse_create_post);
 
 // GET request to delete trainingCourse.
-router.get("/trainingCourse/:id/delete", trainingCourse_controller.trainingCourse_delete_get);
+router.get("/:id/delete", trainingCourse_controller.trainingCourse_delete_get);
 
 // POST request to delete trainingCourse.
-router.post("/trainingCourse/:id/delete", trainingCourse_controller.trainingCourse_delete_post);
+router.post("/:id/delete", trainingCourse_controller.trainingCourse_delete_post);
 
 // GET request to update trainingCourse.
-router.get("/trainingCourse/:id/update", trainingCourse_controller.trainingCourse_update_get);
+router.get("/:id/update", trainingCourse_controller.trainingCourse_update_get);
 
 // POST request to update trainingCourse.
-router.post("/trainingCourse/:id/update", trainingCourse_controller.trainingCourse_update_post);
+router.post("/:id/update", trainingCourse_controller.trainingCourse_update_post);
 
 // GET request for one trainingCourse.
-router.get("/trainingCourse/:id", trainingCourse_controller.trainingCourse_detail);
+router.get("/:id", trainingCourse_controller.trainingCourse_detail);
 
 // GET request for list of all trainingCourse items.
-router.get("/trainingCourse", trainingCourse_controller.trainingCourse_list);
+router.get("/", trainingCourse_controller.trainingCourse_list);
 
 module.exports = router;
