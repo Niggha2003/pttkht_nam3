@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const accountTraining_controller = require("../controllers/accountTrainingController");
+const accountTraining_controller = require("../controllers/accountControllers/accountTraining_controller");
 
 /// home page ///
 

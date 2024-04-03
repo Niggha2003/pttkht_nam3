@@ -1,5 +1,5 @@
-const AccountTraining = require('../models/accountModels/accountTraining');
-const connectCreate = require('../routes/connect');
+const AccountTraining = require('../../models/accountModels/accountTraining');
+const connectCreate = require('../../routes/connect');
 
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
@@ -11,7 +11,7 @@ function md5Hash(inputString) {
 
 exports.accountTraining_list = asyncHandler(async (req, res, next) => {
     connectCreate.connect();
-    const accountTraining_list = await AccountTraining.find({}).exec();
+    const accountTraining_list = await AccountTraining.find({role: "student"}).exec();
     res.json(accountTraining_list);
     connectCreate.close();
 });
