@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const accountRoutes = require("./accountRoutes");
+const orderRoutes = require("./orderRoutes");
+const signingRoutes = require("./signingRoutes");
+const trainingSystemRoutes = require("./trainingSystemRoutes");
+const workingRoutes = require("./workingRoutes");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'hhh' });
-});
 
-module.exports = router;
+module.exports = {
+  accountRoutes,
+  orderRoutes,
+  signingRoutes,
+  trainingSystemRoutes,
+  workingRoutes,
+}

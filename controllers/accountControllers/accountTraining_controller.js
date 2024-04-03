@@ -29,7 +29,7 @@ exports.accountTraining_create_get = asyncHandler(async (req, res, next) => {
 // Handle Author create on POST.
 exports.accountTraining_create_post = asyncHandler(async (req, res, next) => {
     connectCreate.connect();
-
+    
     const accountTraining = new AccountTraining();
 
     accountTraining.accountCode = req.query.accountCode;
@@ -43,7 +43,7 @@ exports.accountTraining_create_post = asyncHandler(async (req, res, next) => {
 
 // Display Author delete form on GET.
 exports.accountTraining_delete_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Author delete GET");
+    res.send("NOT IMPLEMENTED: Author delete GET "+ req.params.id);
 });
 
 // Handle Author delete on POST.
