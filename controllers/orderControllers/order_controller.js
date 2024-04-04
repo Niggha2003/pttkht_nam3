@@ -1,9 +1,16 @@
 const Order = require("../../models/orderModels/order");
+const connectCreate = require('../../routes/connect');
+
 const asyncHandler = require("express-async-handler");
 
 // Display list of all orders.
 exports.order_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: order list");
+  connectCreate.connect();
+
+  const order_list = await Order.find({}).exec();
+  res.json(order_list);
+  
+  connectCreate.close();
 });
 
 // Display detail page for a specific order.
