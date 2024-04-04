@@ -12,7 +12,7 @@ function md5Hash(inputString) {
 exports.accountTraining_list = asyncHandler(async (req, res, next) => {
     connectCreate.connect();
 
-    const accountTraining_list = await AccountTraining.find({}).exec();
+    const accountTraining_list = await AccountTraining.find({}).populate('person').exec();
     res.json(accountTraining_list);
     
     connectCreate.close();
@@ -47,7 +47,7 @@ exports.accountTraining_create_post = asyncHandler(async (req, res, next) => {
       accountTraining.accountCode = req.query.accountCode;
       accountTraining.password = md5Hash(req.query.password);
       accountTraining.role = req.query.role;
-      accountTraining.person = req.query.personId;
+      accountTraining.person = req.query.person;
     
       await accountTraining.save();
       res.json(accountTraining);
@@ -98,7 +98,7 @@ exports.accountTraining_update_post = asyncHandler(async (req, res, next) => {
           accountCode : req.query.accountCode,
           password : md5Hash(req.query.password),
           role : req.query.role,
-          person : req.query.personId,
+          person : req.query.person,
         }
       }
     ).exec();

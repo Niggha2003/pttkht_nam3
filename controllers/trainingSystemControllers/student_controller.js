@@ -3,12 +3,22 @@ const asyncHandler = require("express-async-handler");
 
 // Display list of all students.
 exports.student_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: student list");
+  connectCreate.connect();
+
+  const student_list = await Student.find({}).populate('accountTraining').populate('worker').exec();
+  res.json(student_list);
+  
+  connectCreate.close();
 });
 
 // Display detail page for a specific student.
 exports.student_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: student detail: ${req.params.id}`);
+  connectCreate.connect();
+
+  const student_detail = await Student.findById(req.params.id).populate('accountTraining').populate('worker').exec();
+  res.json(student_detail);
+  
+  connectCreate.close();
 });
 
 // Display student create form on GET.
@@ -18,12 +28,32 @@ exports.student_create_get = asyncHandler(async (req, res, next) => {
 
 // Handle student create on POST.
 exports.student_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: student create POST");
+  connectCreate.connect();
+
+  const student = new Student(); 
+  student.accountTraining = req.query.accountTraining;
+  student.worker = req.query.worker;
+
+  await student.save();
+  res.json(student);
+  
+  connectCreate.close();
 });
 
 // Display student delete form on GET.
 exports.student_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: student delete GET");
+  connectCreate.connect();
+  
+  const checkStudentExist = await Student.findById(req.params.id).exec();
+
+  if(!checkStudentExist) {
+    res.status(404).json({ error: 'ID not exists' });
+  }else{
+    await Student.deleteOne({_id : req.params.id}).exec();
+    res.send("Delete success!");
+  }
+
+  connectCreate.close();
 });
 
 // Handle student delete on POST.
@@ -38,5 +68,24 @@ exports.student_update_get = asyncHandler(async (req, res, next) => {
 
 // Handle student update on POST.
 exports.student_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: student update POST");
+  connectCreate.connect();
+  
+  const checkStudentExist = await Student.findById(req.params.id).exec();
+
+  if(!checkStudentExist) {
+    res.status(404).json({ error: 'ID not exists' });
+  }else{
+    await Student.updateOne(
+      {_id: req.params.id},
+      {$set: 
+        {
+          accountTraining : req.query.accountTraining,
+          worker : req.query.worker,
+        }
+      }
+    ).exec();
+    res.send("Update success!");
+  }
+
+  connectCreate.close();
 });

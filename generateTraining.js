@@ -16,6 +16,7 @@ const Apply = require('./models/signingModels/apply');
 const Flight = require('./models/orderModels/flight');
 const Order = require('./models/orderModels/order');
 const LearningDoc = require('./models/trainingSystemModels/learningDoc');
+const accountTraining = require('./models/accountModels/accountTraining');
 
 
 // để query không cần phải logic (strict)
@@ -188,9 +189,9 @@ async function createTrainingCourse() {
 // Kết thúc tạo trainingCourse
 
 //** Tạo worker */
-async function workerCreate(index, isMarried) {
+async function workerCreate(index, isMarried, accountTraining) {
     const worker = new Worker({
-        isMarried
+        isMarried,accountTraining
     });
     await worker.save();
     workers[index] = worker;
@@ -199,9 +200,9 @@ async function workerCreate(index, isMarried) {
 
 async function createWorker() {
     await Promise.all([
-        workerCreate(0,false),
-        workerCreate(1,false),
-        workerCreate(2,false),
+        workerCreate(0,false, accountTraining[0]),
+        workerCreate(1,false, accountTraining[1]),
+        workerCreate(2,false, accountTraining[2]),
     ])
 }
 // Kết thúc tạo worker

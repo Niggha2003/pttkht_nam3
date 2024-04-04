@@ -23,7 +23,7 @@ app.post('/login', (req, res) => {
     });
   });
   
-  
+
 // test verify token
 app.get('/test', (req, res) => {
 // Token nhận được từ client
@@ -36,6 +36,12 @@ jwt.verify(token, secretKey, (err, decoded) => {
         // Xử lý lỗi khi không thể parse token
     } else {
         res.json({decoded});
+
+        // Thời gian hết hạn của token (được giải mã từ token)
+        const expTime = decoded.exp;
+
+        // Tính thời gian còn lại trước khi token hết hạn (đơn vị: giây)
+        const remainingTime = expTime - currentTime;
         // decoded chứa các thông tin được trích xuất từ token
         // Ví dụ: decoded.user_id, decoded.username, vv.
 }});
