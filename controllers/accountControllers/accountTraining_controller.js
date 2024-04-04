@@ -35,6 +35,8 @@ exports.accountTraining_create_post = asyncHandler(async (req, res, next) => {
     accountTraining.accountCode = req.query.accountCode;
     accountTraining.password = md5Hash(req.query.password);
     accountTraining.role = req.query.role;
+    accountTraining.person = req.query.personId;
+
     await accountTraining.save();
 
     res.json(accountTraining);

@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const Student = require("./student");
+const Teacher = require("./teacher");
+const Subject = require("./subject");
+const Mark = require("./mark");
+
 const Schema = mongoose.Schema;
 
 const trainingClassSchema = new Schema({
@@ -7,7 +12,7 @@ const trainingClassSchema = new Schema({
    students: {
     type: [{
         type: Schema.Types.ObjectId,
-        ref: "student",
+        ref: Student,
     }],
     required: true,
     default: []
@@ -35,8 +40,8 @@ const trainingClassSchema = new Schema({
         }
     }
    },
-   teacher: {type: Schema.Types.ObjectId, ref: "teacher", required: true},
-   subject: {type: Schema.Types.ObjectId, ref: "subject", required: true},
+   teacher: {type: Schema.Types.ObjectId, ref: Teacher, required: true},
+   subject: {type: Schema.Types.ObjectId, ref: Subject, required: true},
    learningDocs: {
     type: [{
         type: Object,
@@ -54,7 +59,7 @@ const trainingClassSchema = new Schema({
    marks: {
     type: [{
         type: Schema.Types.ObjectId,
-        ref: "mark",
+        ref: Mark,
     }],
     required: true,
     default: []

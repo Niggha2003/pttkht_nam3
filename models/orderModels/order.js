@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Worker = require("../workingModels/worker");
+const AccountEmployee = require("../accountModels/accountEmployee");
+
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
@@ -62,11 +65,11 @@ const orderSchema = new Schema({
         default: "hap",
     },
     type: {type: String, required: true},
-    employee: {type: Schema.Types.ObjectId, ref:'accountEmployee', required: true},
+    employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
     workers: {
         type: [{
             type: Schema.Types.ObjectId, 
-            ref: 'worker',
+            ref: Worker,
         }],
         required: true,
         default: []

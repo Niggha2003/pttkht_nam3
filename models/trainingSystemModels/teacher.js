@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
+const Subject = require("./subject")
+
 const Schema = mongoose.Schema;
 
 const teacherSchema = new Schema({
-    accountTraining: {type: Schema.Types.ObjectId, ref: 'accountTraining'},
+    accountTraining: {type: Schema.Types.ObjectId, ref: 'AccountTraining'},
     subjects: {
         type: [{
             type: Schema.Types.ObjectId,
-            ref: 'subject',
+            ref: Subject,
         }],
         required: true,
         default: []

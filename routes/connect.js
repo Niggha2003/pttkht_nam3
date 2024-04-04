@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.set("strictQuery", false)
+mongoose.set("strictQuery", false);
 
 const mongoDB = "mongodb://localhost:27017/pttkht_nam3";
 

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Order = require("../orderModels/order");
+
+
 const Schema = mongoose.Schema;
 
 const applySchema = new Schema({
@@ -6,7 +9,7 @@ const applySchema = new Schema({
     email: {type: String, required: true},
     name: {type: String, required: true},
     birthDate: {type: Date, required: true},
-    order: {type: Schema.Types.ObjectId, ref: 'order', required: true},
+    order: {type: Schema.Types.ObjectId, ref: Order, required: true},
     state: {
         type: String, 
         required: true,

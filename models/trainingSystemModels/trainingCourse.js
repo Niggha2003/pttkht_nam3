@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Student = require('./student');
+const TrainingClass = require('./trainingClass');
+
 const Schema = mongoose.Schema;
 
 const trainingCourseSchema = new Schema({
@@ -7,7 +10,7 @@ const trainingCourseSchema = new Schema({
    students: {
     type: [{
         type: Schema.Types.ObjectId,
-        ref: "student",
+        ref: Student,
     }],
     required: true,
     default: []
@@ -15,7 +18,7 @@ const trainingCourseSchema = new Schema({
    trainingClasses: {
     type: [{
         type: Schema.Types.ObjectId,
-        ref: "trainingClass",
+        ref: TrainingClass,
     }],
     required: true,
     default: []
