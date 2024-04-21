@@ -3,8 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 
-var indexRouter = require('./routes/index');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const indexRouter = require('./routes/index');
+const service = require('./service')
 
 var app = express();
 
@@ -12,18 +16,31 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// Cấu hình middleware CORS
+const corsOptions = {
+  origin: 'http://localhost:5000', // Chỉ định nguồn gốc chính xác của yêu cầu
+  credentials: true, // Cho phép sử dụng thông tin xác thực (credentials)
+};
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/working", indexRouter.workingRoutes);
-app.use("/trainingSystem", indexRouter.trainingSystemRoutes);
-app.use("/signing", indexRouter.signingRoutes);
-app.use("/order", indexRouter.orderRoutes);
-app.use("/account", indexRouter.accountRoutes);
+app.use("/api/working", indexRouter.workingRoutes);
+app.use("/api/trainingSystem", indexRouter.trainingSystemRoutes);
+app.use("/api/signing", indexRouter.signingRoutes);
+app.use("/api/order",  indexRouter.orderRoutes);
+app.use("/api/account",  indexRouter.accountRoutes);
 
+app.use('/api/api_login', service.login)
+
+app.use('/', createProxyMiddleware({ 
+  target: 'http://localhost:5173', // FE server port
+  changeOrigin: true,
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -40,5 +57,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(5000)
 
 module.exports = app;
