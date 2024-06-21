@@ -15,23 +15,25 @@ function md5Hash(inputString) {
 }
 
 // Route để tạo và trả về JWT
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     // Payload của JWT, có thể chứa thông tin người dùng, quyền hạn, vv.
     connectCreate.connect();
 
     const account = await Account.findOne({
-        accountCode : req.query.accountName,
-        password : md5Hash(req.query.accountPassword)
-    }).exec();
+        accountCode : req.body.accountName,
+        password : md5Hash(req.body.accountPassword)
+    }).populate('person').exec();
 
     if(account) {
         const payload = {
-            accountCode: req.query.accountName,
-            password: req.query.accountPassword,
-            role: account.role
+            accountCode: req.body.accountName,
+            password: req.body.accountPassword,
+            role: account.role,
+            name: account.person.name,
+            photo: account.person.photo,
         };
-        // Tạo JWT bằng cách ký payload với secret key và add vào cookie
-        jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
+        // Tạo JWT bằng cách ký payload với secret key 
+        jwt.sign(payload, secretKey, { expiresIn: Date.now() + 3600 }, (err, token) => {
             if (err) {
                 console.error('Error creating JWT:', err);
                 res.status(500).json({ error: 'Failed to create JWT' });

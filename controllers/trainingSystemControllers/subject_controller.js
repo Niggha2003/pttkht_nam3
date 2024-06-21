@@ -8,7 +8,7 @@ exports.subject_list = asyncHandler(async (req, res, next) => {
   const subject_list = await Subject.find({}).exec();
   res.json(subject_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific subject.
@@ -18,7 +18,7 @@ exports.subject_detail = asyncHandler(async (req, res, next) => {
   const subject_detail = await Subject.findById(req.params.id).exec();
   res.json(subject_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display subject create form on GET.
@@ -31,13 +31,13 @@ exports.subject_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const subject = new Subject(); 
-  subject.name = req.query.name;
-  subject.description = req.query.description;
+  subject.name = req.body.name;
+  subject.description = req.body.description;
 
   await subject.save();
   res.json(subject);
   
-  connectCreate.close();
+  
 });
 
 // Display subject delete form on GET.
@@ -53,7 +53,7 @@ exports.subject_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle subject delete on POST.
@@ -79,13 +79,13 @@ exports.subject_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          name : req.query.name,
-          description : req.query.description,
+          name : req.body.name,
+          description : req.body.description,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

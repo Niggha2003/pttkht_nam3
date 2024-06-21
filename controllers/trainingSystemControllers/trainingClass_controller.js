@@ -8,7 +8,7 @@ exports.trainingClass_list = asyncHandler(async (req, res, next) => {
   const trainingClass_list = await TrainingClass.find({}).exec();
   res.json(trainingClass_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific trainingClass.
@@ -18,7 +18,7 @@ exports.trainingClass_detail = asyncHandler(async (req, res, next) => {
   const trainingClass_detail = await TrainingClass.findById(req.params.id).exec();
   res.json(trainingClass_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display trainingClass create form on GET.
@@ -31,23 +31,23 @@ exports.trainingClass_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const trainingClass = new TrainingClass(); 
-  trainingClass.name = req.query.name;
-  trainingClass.description = req.query.description;
-  trainingClass.students = req.query.students;
-  trainingClass.dayOfWeek = req.query.dayOfWeek;
-  trainingClass.dayStart = req.query.dayStart;
-  trainingClass.dayEnd = req.query.dayEnd;
-  trainingClass.timeStart = req.query.timeStart;
-  trainingClass.timeEnd = req.query.timeEnd;
-  trainingClass.teacher = req.query.teacher;
-  trainingClass.subject = req.query.subject;
-  trainingClass.learningDocs = req.query.learningDocs;
-  trainingClass.marks = req.query.marks;
+  trainingClass.name = req.body.name;
+  trainingClass.description = req.body.description;
+  trainingClass.students = req.body.students;
+  trainingClass.dayOfWeek = req.body.dayOfWeek;
+  trainingClass.dayStart = req.body.dayStart;
+  trainingClass.dayEnd = req.body.dayEnd;
+  trainingClass.timeStart = req.body.timeStart;
+  trainingClass.timeEnd = req.body.timeEnd;
+  trainingClass.teacher = req.body.teacher;
+  trainingClass.subject = req.body.subject;
+  trainingClass.learningDocs = req.body.learningDocs;
+  trainingClass.marks = req.body.marks;
 
   await trainingClass.save();
   res.json(trainingClass);
   
-  connectCreate.close();
+  
 });
 
 // Display trainingClass delete form on GET.
@@ -63,7 +63,7 @@ exports.trainingClass_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle trainingClass delete on POST.
@@ -89,23 +89,23 @@ exports.trainingClass_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          name : req.query.name,
-          description : req.query.description,
-          students : req.query.students,
-          dayOfWeek : req.query.dayOfWeek,
-          dayStart : req.query.dayStart,
-          dayEnd : req.query.dayEnd,
-          timeStart : req.query.timeStart,
-          timeEnd : req.query.timeEnd,
-          teacher : req.query.teacher,
-          subject : req.query.subject,
-          learningDocs : req.query.learningDocs,
-          marks : req.query.marks,
+          name : req.body.name,
+          description : req.body.description,
+          students : req.body.students,
+          dayOfWeek : req.body.dayOfWeek,
+          dayStart : req.body.dayStart,
+          dayEnd : req.body.dayEnd,
+          timeStart : req.body.timeStart,
+          timeEnd : req.body.timeEnd,
+          teacher : req.body.teacher,
+          subject : req.body.subject,
+          learningDocs : req.body.learningDocs,
+          marks : req.body.marks,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

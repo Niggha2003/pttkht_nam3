@@ -18,7 +18,7 @@ exports.accountEmployee_list = asyncHandler(async (req, res, next) => {
   const accountEmployee_list = await AccountEmployee.find({}).populate('person').exec();
   res.json(accountEmployee_list);
 
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific accountEmployee.
@@ -28,7 +28,7 @@ exports.accountEmployee_detail = asyncHandler(async (req, res, next) => {
   const accountEmployee_detail = await AccountEmployee.findById(req.params.id).populate('person').exec();
   res.json(accountEmployee_detail);
 
-  connectCreate.close();
+  
 });
 
 // Display accountEmployee create form on GET.
@@ -40,23 +40,23 @@ exports.accountEmployee_create_get = asyncHandler(async (req, res, next) => {
 exports.accountEmployee_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
   
-  const checkAccountExist = await AccountEmployee.findOne({ accountCode: req.query.accountCode }).exec();
+  const checkAccountExist = await AccountEmployee.findOne({ accountCode: req.body.accountCode }).exec();
 
   if(checkAccountExist) {
     res.status(409).json({ error: 'ID already exists' });
   }else{
     const accountEmployee = new AccountEmployee();
 
-    accountEmployee.accountCode = req.query.accountCode;
-    accountEmployee.password = md5Hash(req.query.password);
-    accountEmployee.role = req.query.role;
-    accountEmployee.person = req.query.person;
+    accountEmployee.accountCode = req.body.accountCode;
+    accountEmployee.password = md5Hash(req.body.password);
+    accountEmployee.role = req.body.role;
+    accountEmployee.person = req.body.person;
   
     await accountEmployee.save();
     res.json(accountEmployee);
   }
 
-  connectCreate.close();
+  
 });
 
 // Display accountEmployee delete form on GET.
@@ -72,7 +72,7 @@ exports.accountEmployee_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle accountEmployee delete on POST.
@@ -98,15 +98,15 @@ exports.accountEmployee_update_post = asyncHandler(async (req, res, next) => {
       {accountCode: checkAccountExist.accountCode},
       {$set: 
         {
-          accountCode : req.query.accountCode,
-          password : md5Hash(req.query.password),
-          role : req.query.role,
-          person : req.query.person,
+          accountCode : req.body.accountCode,
+          password : md5Hash(req.body.password),
+          role : req.body.role,
+          person : req.body.person,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

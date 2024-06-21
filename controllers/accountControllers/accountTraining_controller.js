@@ -1,5 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+
 const AccountTraining = require('../../models/accountModels/accountTraining');
 const connectCreate = require('../../routes/connect');
+const Person = require("../../models/accountModels/person");
+
+const worker_controller = require('../workingControllers/worker_controller')
 
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
@@ -15,7 +21,7 @@ exports.accountTraining_list = asyncHandler(async (req, res, next) => {
     const accountTraining_list = await AccountTraining.find({}).populate('person').exec();
     res.json(accountTraining_list);
     
-    connectCreate.close();
+    
 });
 
 // Display detail page for a specific Author.
@@ -25,7 +31,7 @@ exports.accountTraining_detail = asyncHandler(async (req, res, next) => {
     const accountTraining_detail = await AccountTraining.findById(req.params.id).populate('person').exec();
     res.json(accountTraining_detail);
   
-    connectCreate.close();
+    
 });
 
 // Display Author create form on GET.
@@ -37,23 +43,26 @@ exports.accountTraining_create_get = asyncHandler(async (req, res, next) => {
 exports.accountTraining_create_post = asyncHandler(async (req, res, next) => {
     connectCreate.connect();
   
-    const checkAccountExist = await AccountTraining.findOne({ accountCode: req.query.accountCode }).exec();
+    const checkAccountExist = await AccountTraining.findOne({ accountCode: req.body.accountTraining.accountCode }).exec();
   
     if(checkAccountExist) {
       res.status(409).json({ error: 'ID already exists' });
     }else{
       const accountTraining = new AccountTraining();
-  
-      accountTraining.accountCode = req.query.accountCode;
-      accountTraining.password = md5Hash(req.query.password);
-      accountTraining.role = req.query.role;
-      accountTraining.person = req.query.person;
+      
+      const person = new Person(req.body.accountTraining.person);
+      await person.save();
+
+      accountTraining.accountCode = req.body.accountTraining.accountCode;
+      accountTraining.password = md5Hash(req.body.accountTraining.password);
+      accountTraining.role = req.body.accountTraining.role;
+      accountTraining.person = person;
     
       await accountTraining.save();
-      res.json(accountTraining);
+      res.status(200).send({status: 'create success'})
     }
   
-    connectCreate.close();
+    
 });
 
 // Display Author delete form on GET.
@@ -69,7 +78,7 @@ exports.accountTraining_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle Author delete on POST.
@@ -95,17 +104,48 @@ exports.accountTraining_update_post = asyncHandler(async (req, res, next) => {
       {accountCode: checkAccountExist.accountCode},
       {$set: 
         {
-          accountCode : req.query.accountCode,
-          password : md5Hash(req.query.password),
-          role : req.query.role,
-          person : req.query.person,
+          accountCode : req.body.accountTraining.accountCode,
+          password : req.body.accountTraining.password,
+          role : req.body.accountTraining.role,
         }
       }
     ).exec();
-    res.send("Update success!");
-  }
+    const p = req.body.accountTraining.person;
+    await Person.updateOne(
+      {_id: p._id},
+      {$set: 
+        {
+          name: p.name,
+          birthDate: p.birthDate,
+          phoneNumber: p.phoneNumber,
+          academicLevel: p.academicLevel,
+          anotherCertificates: p.anotherCertificates,
+          address: p.address,
+          associateContact: p.associateContact,
+          identifyCard: p.identifyCard,
+          ...(p.photoType && { photo: p._id + "." + p.photoType }), // chỉ cập nhật photo mới nếu có photoType được gửi đi
+        }
+      }
+    ).exec();
+    const base64Data = p.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
 
-  connectCreate.close();
+    if(p.photoType) {
+      const uploadPath = require('path').join(__dirname, '../../public', 'images','user', p._id + "." + p.photoType);
+      // Tạo một WriteStream để ghi dữ liệu vào tệp
+      const writeStream = fs.createWriteStream(uploadPath);
+      // Chuyển dữ liệu base64 thành Buffer
+      const bufferData = Buffer.from(base64Data, 'base64');
+      // Ghi dữ liệu vào tệp
+      writeStream.write(bufferData);
+      // Xử lý sự kiện lỗi
+      writeStream.on('error', (err) => {
+        console.error('Lỗi khi lưu tệp:', err);
+        res.status(500).json({ message: 'Lỗi khi lưu tệp' });
+      });
+    }
+    const worker_list = await worker_controller.worker_list()
+    res.status(200).send({status: 200, data: worker_list});
+  }
 });
 
 

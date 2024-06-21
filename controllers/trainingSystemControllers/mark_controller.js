@@ -8,7 +8,7 @@ exports.mark_list = asyncHandler(async (req, res, next) => {
   const mark_list = await Mark.find({}).populate('student').exec();
   res.json(mark_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific mark.
@@ -18,7 +18,7 @@ exports.mark_detail = asyncHandler(async (req, res, next) => {
   const mark_detail = await Mark.findById(req.params.id).populate('student').exec();
   res.json(mark_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display mark create form on GET.
@@ -31,14 +31,14 @@ exports.mark_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const mark = new Mark(); 
-  mark.middleMark = req.query.middleMark;
-  mark.finalMark = req.query.finalMark;
-  mark.student = req.query.student;
+  mark.middleMark = req.body.middleMark;
+  mark.finalMark = req.body.finalMark;
+  mark.student = req.body.student;
 
   await mark.save();
   res.json(mark);
   
-  connectCreate.close();
+  
 });
 
 // Display mark delete form on GET.
@@ -54,7 +54,7 @@ exports.mark_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle mark delete on POST.
@@ -80,14 +80,14 @@ exports.mark_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          middleMark : req.query.middleMark,
-          finalMark : req.query.finalMark,
-          student : req.query.student,
+          middleMark : req.body.middleMark,
+          finalMark : req.body.finalMark,
+          student : req.body.student,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

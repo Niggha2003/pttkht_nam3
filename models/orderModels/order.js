@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
-const Worker = require("../workingModels/worker");
 const AccountEmployee = require("../accountModels/accountEmployee");
 
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
+    orderCode: {type: String, required: true},
+    orderName: {type: String, required: true},
     companyName: {type: String, required: true},
     companyAddress: {type: String, required: true},
     jobDescription: {type: String, required: true},
@@ -64,16 +65,13 @@ const orderSchema = new Schema({
         // haven't apply, đang đào tạo, inprogress, đã hoàn thành
         default: "hap",
     },
-    type: {type: String, required: true},
-    employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
-    workers: {
-        type: [{
-            type: Schema.Types.ObjectId, 
-            ref: Worker,
-        }],
+    type: {
+        type: String, 
         required: true,
-        default: []
-    }
+        // cơ khí, dệt may, ô sin, bốc vác
+        enum: ["ck", "dm", "os" ,"bv"]
+    },
+    employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
 })
 
 orderSchema.virtual('url').get(function() {

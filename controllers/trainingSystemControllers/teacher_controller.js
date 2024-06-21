@@ -8,7 +8,7 @@ exports.teacher_list = asyncHandler(async (req, res, next) => {
   const teacher_list = await Teacher.find({}).populate('accountTraining').populate('subjects').exec();
   res.json(teacher_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific teacher.
@@ -18,7 +18,7 @@ exports.teacher_detail = asyncHandler(async (req, res, next) => {
   const teacher_detail = await Teacher.findById(req.params.id).populate('accountTraining').populate('subjects').exec();
   res.json(teacher_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display teacher create form on GET.
@@ -31,13 +31,13 @@ exports.teacher_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const teacher = new Teacher(); 
-  teacher.accountTraining = req.query.accountTraining;
-  teacher.subjects = req.query.subjects;
+  teacher.accountTraining = req.body.accountTraining;
+  teacher.subjects = req.body.subjects;
 
   await teacher.save();
   res.json(teacher);
   
-  connectCreate.close();
+  
 });
 
 // Display teacher delete form on GET.
@@ -53,7 +53,7 @@ exports.teacher_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle teacher delete on POST.
@@ -79,13 +79,13 @@ exports.teacher_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          accountTraining : req.query.accountTraining,
-          subjects : req.query.subjects,
+          accountTraining : req.body.accountTraining,
+          subjects : req.body.subjects,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

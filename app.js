@@ -4,13 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
-
+const bodyParser = require('body-parser');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const indexRouter = require('./routes/index');
 const service = require('./service')
 
 var app = express();
+
+// Tăng giới hạn tải lên lên 50MB
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,7 +23,7 @@ app.set('view engine', 'jade');
 // Cấu hình middleware CORS
 const corsOptions = {
   origin: 'http://localhost:5000', // Chỉ định nguồn gốc chính xác của yêu cầu
-  credentials: true, // Cho phép sử dụng thông tin xác thực (credentials)
+  // credentials: true, // Cho phép sử dụng thông tin xác thực (credentials)
 };
 
 app.use(cors(corsOptions));
@@ -36,6 +40,7 @@ app.use("/api/order",  indexRouter.orderRoutes);
 app.use("/api/account",  indexRouter.accountRoutes);
 
 app.use('/api/api_login', service.login)
+app.use('/api/api_check_jwt', service.check_jwt());
 
 app.use('/', createProxyMiddleware({ 
   target: 'http://localhost:5173', // FE server port

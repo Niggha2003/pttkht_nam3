@@ -8,7 +8,7 @@ exports.student_list = asyncHandler(async (req, res, next) => {
   const student_list = await Student.find({}).populate('accountTraining').populate('worker').exec();
   res.json(student_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific student.
@@ -18,7 +18,7 @@ exports.student_detail = asyncHandler(async (req, res, next) => {
   const student_detail = await Student.findById(req.params.id).populate('accountTraining').populate('worker').exec();
   res.json(student_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display student create form on GET.
@@ -31,13 +31,13 @@ exports.student_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const student = new Student(); 
-  student.accountTraining = req.query.accountTraining;
-  student.worker = req.query.worker;
+  student.accountTraining = req.body.accountTraining;
+  student.worker = req.body.worker;
 
   await student.save();
   res.json(student);
   
-  connectCreate.close();
+  
 });
 
 // Display student delete form on GET.
@@ -53,7 +53,7 @@ exports.student_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle student delete on POST.
@@ -79,13 +79,13 @@ exports.student_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          accountTraining : req.query.accountTraining,
-          worker : req.query.worker,
+          accountTraining : req.body.accountTraining,
+          worker : req.body.worker,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

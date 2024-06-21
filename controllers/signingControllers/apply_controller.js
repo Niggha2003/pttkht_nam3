@@ -8,7 +8,7 @@ exports.apply_list = asyncHandler(async (req, res, next) => {
   const apply_list = await Apply.find({}).populate('order').exec();
   res.json(apply_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific apply.
@@ -18,7 +18,7 @@ exports.apply_detail = asyncHandler(async (req, res, next) => {
   const apply_detail = await Apply.findById(req.params.id).populate('order').exec();
   res.json(apply_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display apply create form on GET.
@@ -31,17 +31,17 @@ exports.apply_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const apply = new Apply(); 
-  apply.phoneNumber = req.query.phoneNumber;
-  apply.email = req.query.email;
-  apply.name = req.query.name;
-  apply.birthDate = req.query.birthDate;
-  apply.order = req.query.order;
-  apply.state = req.query.state;
+  apply.phoneNumber = req.body.phoneNumber;
+  apply.email = req.body.email;
+  apply.name = req.body.name;
+  apply.birthDate = req.body.birthDate;
+  apply.order = req.body.order;
+  apply.state = req.body.state;
 
   await apply.save();
   res.json(apply);
   
-  connectCreate.close();
+  
 });
 
 // Display apply delete form on GET.
@@ -57,7 +57,7 @@ exports.apply_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle apply delete on POST.
@@ -83,17 +83,17 @@ exports.apply_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          phoneNumber : req.query.phoneNumber,
-          email : req.query.email,
-          name : req.query.name,
-          birthDate : req.query.birthDate,
-          order : req.query.order,
-          state : req.query.state,
+          phoneNumber : req.body.phoneNumber,
+          email : req.body.email,
+          name : req.body.name,
+          birthDate : req.body.birthDate,
+          order : req.body.order,
+          state : req.body.state,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });

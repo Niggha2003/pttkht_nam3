@@ -10,20 +10,11 @@ exports.order_list = asyncHandler(async (req, res, next) => {
   const order_list = 
         await Order.find({})
                     .populate('employee')
-                    .populate({
-                      path: 'workers',
-                      populate: {
-                        path: 'accountTraining',
-                        populate: {
-                          path: 'person'
-                        }
-                      }
-                    })
                     .exec();
 
   res.json(order_list);
   
-  connectCreate.close();
+  
 });
 
 // Display detail page for a specific order.
@@ -33,20 +24,11 @@ exports.order_detail = asyncHandler(async (req, res, next) => {
   const order_detail = 
         await Order.findById(req.params.id)
                     .populate('employee')
-                    .populate({
-                      path: 'workers',
-                      populate: {
-                        path: 'accountTraining',
-                        populate: {
-                          path: 'person'
-                        }
-                      }
-                    })
                     .exec();
 
   res.json(order_detail);
   
-  connectCreate.close();
+  
 });
 
 // Display order create form on GET.
@@ -59,26 +41,25 @@ exports.order_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const order = new Order(); 
-  order.companyName = req.query.companyName;
-  order.companyAddress = req.query.companyAddress;
-  order.jobDescription = req.query.jobDescription;
-  order.quantityRequire = req.query.quantityRequire;
-  order.ageRequire = req.query.ageRequire;
-  order.heightRequire = req.query.heightRequire;
-  order.weightRequire = req.query.weightRequire;
-  order.bodyRequire = req.query.bodyRequire;
-  order.academicLevelRequire = req.query.academicLevelRequire;
-  order.salary = req.query.salary;
-  order.timeNeeded = req.query.timeNeeded;
-  order.state = req.query.state;
-  order.type = req.query.type;
-  order.employee = req.query.employee;
-  order.workers = req.query.workers;
+  order.companyName = req.body.companyName;
+  order.companyAddress = req.body.companyAddress;
+  order.jobDescription = req.body.jobDescription;
+  order.quantityRequire = req.body.quantityRequire;
+  order.ageRequire = req.body.ageRequire;
+  order.heightRequire = req.body.heightRequire;
+  order.weightRequire = req.body.weightRequire;
+  order.bodyRequire = req.body.bodyRequire;
+  order.academicLevelRequire = req.body.academicLevelRequire;
+  order.salary = req.body.salary;
+  order.timeNeeded = req.body.timeNeeded;
+  order.state = req.body.state;
+  order.type = req.body.type;
+  order.employee = req.body.employee;
 
   await order.save();
-  res.json(order);
+  res.status(200).send({status: 'create success'})
   
-  connectCreate.close();
+  
 });
 
 // Display order delete form on GET.
@@ -94,7 +75,7 @@ exports.order_delete_get = asyncHandler(async (req, res, next) => {
     res.send("Delete success!");
   }
 
-  connectCreate.close();
+  
 });
 
 // Handle order delete on POST.
@@ -120,26 +101,25 @@ exports.order_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          companyName : req.query.companyName,
-          companyAddress : req.query.companyAddress,
-          jobDescription : req.query.jobDescription,
-          quantityRequire : req.query.quantityRequire,
-          ageRequire : req.query.ageRequire,
-          heightRequire : req.query.heightRequire,
-          weightRequire : req.query.weightRequire,
-          bodyRequire : req.query.bodyRequire,
-          academicLevelRequire : req.query.academicLevelRequire,
-          salary : req.query.salary,
-          timeNeeded : req.query.timeNeeded,
-          state : req.query.state,
-          type : req.query.type,
-          employee : req.query.employee,
-          workers : req.query.workers,
+          companyName : req.body.companyName,
+          companyAddress : req.body.companyAddress,
+          jobDescription : req.body.jobDescription,
+          quantityRequire : req.body.quantityRequire,
+          ageRequire : req.body.ageRequire,
+          heightRequire : req.body.heightRequire,
+          weightRequire : req.body.weightRequire,
+          bodyRequire : req.body.bodyRequire,
+          academicLevelRequire : req.body.academicLevelRequire,
+          salary : req.body.salary,
+          timeNeeded : req.body.timeNeeded,
+          state : req.body.state,
+          type : req.body.type,
+          employee : req.body.employee,
         }
       }
     ).exec();
-    res.send("Update success!");
+    res.status(200).send({status: 200})
   }
 
-  connectCreate.close();
+  
 });
