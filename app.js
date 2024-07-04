@@ -38,9 +38,17 @@ app.use("/api/trainingSystem", indexRouter.trainingSystemRoutes);
 app.use("/api/signing", indexRouter.signingRoutes);
 app.use("/api/order",  indexRouter.orderRoutes);
 app.use("/api/account",  indexRouter.accountRoutes);
+app.use("/api/news",  indexRouter.newsRoutes);
+
 
 app.use('/api/api_login', service.login)
 app.use('/api/api_check_jwt', service.check_jwt());
+
+// upload ảnh lên và nhận về đường dẫn 
+app.use('/api/upload_image',  service.upload_image);
+
+// lấy các ảnh từ 1 thư mục nào đó
+app.use('/api/get_image', service.get_image);
 
 app.use('/', createProxyMiddleware({ 
   target: 'http://localhost:5173', // FE server port

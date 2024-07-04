@@ -7,24 +7,26 @@ const asyncHandler = require("express-async-handler");
 // Display list of all flights.
 exports.flight_list = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
-
-  const flight_list = await Flight.find({}).exec();
-  res.json(flight_list);
-
   
+  if(req.query.workerId) {
+    const flight_detail = await Flight.find({worker : req.query.workerId}).exec();
+    if(!flight_detail) {
+      res.json([])
+    }else{
+      res.json(flight_detail);
+    }
+  }else{
+    const flight_list = await Flight.find({}).exec();
+    res.json(flight_list);
+  }
 });
 
 // Display detail page for a specific flight.
 exports.flight_detail = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
-  if(req.params.id) {
-    const flight_detail = await Flight.findById(req.params.id).exec();
-    res.json(flight_detail);
-  }else if(req.params.workerId) {
-    const flight_detail = await Flight.find({worker : req.params.workerId}).exec();
-    res.json(flight_detail);
-  }
+  const flight_detail = await Flight.findById(req.params.id).exec();
+  res.json(flight_detail);
 });
 
 // Display flight create form on GET.

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const account_route = require("./account_route");
+const news_route = require("./news_route");
 
-router.use("/", account_route);
+router.use("/", news_route);
 
 module.exports = router;

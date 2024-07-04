@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const Order = require("../../models/orderModels/order");
 const connectCreate = require('../../routes/connect');
 
@@ -41,20 +44,41 @@ exports.order_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const order = new Order(); 
-  order.companyName = req.body.companyName;
-  order.companyAddress = req.body.companyAddress;
-  order.jobDescription = req.body.jobDescription;
-  order.quantityRequire = req.body.quantityRequire;
-  order.ageRequire = req.body.ageRequire;
-  order.heightRequire = req.body.heightRequire;
-  order.weightRequire = req.body.weightRequire;
-  order.bodyRequire = req.body.bodyRequire;
-  order.academicLevelRequire = req.body.academicLevelRequire;
-  order.salary = req.body.salary;
-  order.timeNeeded = req.body.timeNeeded;
-  order.state = req.body.state;
-  order.type = req.body.type;
-  order.employee = req.body.employee;
+  order.companyName = req.body.order.companyName;
+  order.companyAddress = req.body.order.companyAddress;
+  order.jobDescription = req.body.order.jobDescription;
+  order.quantityRequire = req.body.order.quantityRequire;
+  order.ageRequire = req.body.order.ageRequire;
+  order.heightRequire = req.body.order.heightRequire;
+  order.weightRequire = req.body.order.weightRequire;
+  order.bodyRequire = req.body.order.bodyRequire;
+  order.academicLevelRequire = req.body.order.academicLevelRequire;
+  order.salary = req.body.order.salary;
+  order.timeNeeded = req.body.order.timeNeeded;
+  order.state = req.body.order.state;
+  order.type = req.body.order.type;
+  order.employee = req.body.order.employee;
+  order.paragraph = req.body.order.paragraph;
+  order.isHot = req.body.order.isHot;
+  order.photo = order._id + "." + req.body.order.photoType;
+  order.orderCode = req.body.order.orderCode;
+  order.orderName= req.body.order.orderName;
+  
+  const base64Data = req.body.order.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+
+  const uploadPath = require('path').join(__dirname, '../../public', 'images','order', order.photo);
+
+  // Tạo một WriteStream để ghi dữ liệu vào tệp
+  const writeStream = fs.createWriteStream(uploadPath);
+  // Chuyển dữ liệu base64 thành Buffer
+  const bufferData = Buffer.from(base64Data, 'base64');
+  // Ghi dữ liệu vào tệp
+  writeStream.write(bufferData);
+  // Xử lý sự kiện lỗi
+  writeStream.on('error', (err) => {
+    console.error('Lỗi khi lưu tệp:', err);
+    res.status(500).json({ message: 'Lỗi khi lưu tệp' });
+  });
 
   await order.save();
   res.status(200).send({status: 'create success'})
@@ -101,23 +125,44 @@ exports.order_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          companyName : req.body.companyName,
-          companyAddress : req.body.companyAddress,
-          jobDescription : req.body.jobDescription,
-          quantityRequire : req.body.quantityRequire,
-          ageRequire : req.body.ageRequire,
-          heightRequire : req.body.heightRequire,
-          weightRequire : req.body.weightRequire,
-          bodyRequire : req.body.bodyRequire,
-          academicLevelRequire : req.body.academicLevelRequire,
-          salary : req.body.salary,
-          timeNeeded : req.body.timeNeeded,
-          state : req.body.state,
-          type : req.body.type,
-          employee : req.body.employee,
+          orderCode : req.body.order.orderCode,
+          orderName: req.body.order.orderName,
+          companyName : req.body.order.companyName,
+          companyAddress : req.body.order.companyAddress,
+          jobDescription : req.body.order.jobDescription,
+          quantityRequire : req.body.order.quantityRequire,
+          ageRequire : req.body.order.ageRequire,
+          heightRequire : req.body.order.heightRequire,
+          weightRequire : req.body.order.weightRequire,
+          bodyRequire : req.body.order.bodyRequire,
+          academicLevelRequire : req.body.order.academicLevelRequire,
+          salary : req.body.order.salary,
+          timeNeeded : req.body.order.timeNeeded,
+          state : req.body.order.state,
+          type : req.body.order.type,
+          employee : req.body.order.employee,
+          paragraph : req.body.order.paragraph,
+          isHot : req.body.order.isHot,
+          ...(req.body.order.photoType && { photo: req.body.order._id + "." + req.body.order.photoType }), // chỉ cập nhật photo mới nếu có photoType được gửi đi
         }
       }
     ).exec();
+    const base64Data = req.body.order.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+
+    if(req.body.order.photoType) {
+      const uploadPath = require('path').join(__dirname, '../../public', 'images','order', req.body.order._id + "." + req.body.order.photoType);
+      // Tạo một WriteStream để ghi dữ liệu vào tệp
+      const writeStream = fs.createWriteStream(uploadPath);
+      // Chuyển dữ liệu base64 thành Buffer
+      const bufferData = Buffer.from(base64Data, 'base64');
+      // Ghi dữ liệu vào tệp
+      writeStream.write(bufferData);
+      // Xử lý sự kiện lỗi
+      writeStream.on('error', (err) => {
+        console.error('Lỗi khi lưu tệp:', err);
+        res.status(500).json({ message: 'Lỗi khi lưu tệp' });
+      });
+    }
     res.status(200).send({status: 200})
   }
 

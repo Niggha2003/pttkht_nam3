@@ -56,7 +56,7 @@ const orderSchema = new Schema({
         // cơ sở, phổ thông, cao đẳng, đại học
         enum: ["cs", "pt", "cd" ,"dh"]
     },
-    salary: {type: String, required: true},
+    salary: {type: Number, required: true},
     timeNeeded: {type: Date, required: true},
     state: {
         type: String, 
@@ -72,6 +72,9 @@ const orderSchema = new Schema({
         enum: ["ck", "dm", "os" ,"bv"]
     },
     employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
+    paragraph: {type: String, default: ""},
+    isHot: {type: Boolean, required: true, default: false},
+    photo: {type: String, required: true}
 })
 
 orderSchema.virtual('url').get(function() {
