@@ -108,6 +108,7 @@ exports.news_update_post = asyncHandler(async (req, res, next) => {
         }
       }
     ).exec();
+
     res.status(200).send({status: 200})
   }
 });

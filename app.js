@@ -50,6 +50,12 @@ app.use('/api/upload_image',  service.upload_image);
 // lấy các ảnh từ 1 thư mục nào đó
 app.use('/api/get_image', service.get_image);
 
+// lấy thông tin và sửa thông tin giới thiệu của website
+app.use('/api/introduce', service.set_introduce);
+
+// lấy thông tin và sửa thông tin của công ty
+app.use('/api/info', service.set_infoCompany);
+
 app.use('/', createProxyMiddleware({ 
   target: 'http://localhost:5173', // FE server port
   changeOrigin: true,
