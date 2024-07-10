@@ -57,6 +57,7 @@ const orderSchema = new Schema({
         enum: ["cs", "pt", "cd" ,"dh"]
     },
     salary: {type: Number, required: true},
+    timePosted: {type: Date, default: new Date()},
     timeNeeded: {type: Date, required: true},
     state: {
         type: String, 
@@ -72,7 +73,7 @@ const orderSchema = new Schema({
         enum: ["ck", "dm", "os" ,"bv"]
     },
     employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
-    paragraph: {type: String, default: ""},
+    paragraph: {type: String, required: true},
     isHot: {type: Boolean, required: true, default: false},
     photo: {type: String, required: true}
 })
