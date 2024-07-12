@@ -9,11 +9,19 @@ const asyncHandler = require("express-async-handler");
 // Display list of all orders.
 exports.order_list = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
-
-  const order_list = 
+console.log(req.query)
+  let order_list;
+  if(req.query && req.query != {}) {
+    order_list = 
+        await Order.find({...req.query})
+                    .populate('employee')
+                    .exec();
+  }else{
+    order_list = 
         await Order.find({})
                     .populate('employee')
                     .exec();
+  }
 
   res.json(order_list);
   
@@ -24,10 +32,11 @@ exports.order_list = asyncHandler(async (req, res, next) => {
 exports.order_detail = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
-  const order_detail = 
+    order_detail = 
         await Order.findById(req.params.id)
                     .populate('employee')
                     .exec();
+    
 
   res.json(order_detail);
   

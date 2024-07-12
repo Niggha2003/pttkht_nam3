@@ -1,6 +1,9 @@
 const Apply = require("../../models/signingModels/apply");
 const asyncHandler = require("express-async-handler");
 
+const connectCreate = require('../../routes/connect');
+
+
 // Display list of all applys.
 exports.apply_list = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
@@ -29,18 +32,21 @@ exports.apply_create_get = asyncHandler(async (req, res, next) => {
 // Handle apply create on POST.
 exports.apply_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
+  console.log(req.body.apply)
+  try{
+    const apply = new Apply(); 
+    apply.phoneNumber = req.body.apply.phoneNumber;
+    apply.email = req.body.apply.email;
+    apply.name = req.body.apply.name;
+    apply.birthDate = req.body.apply.birthDate;
+    apply.order = req.body.apply.order;
 
-  const apply = new Apply(); 
-  apply.phoneNumber = req.body.phoneNumber;
-  apply.email = req.body.email;
-  apply.name = req.body.name;
-  apply.birthDate = req.body.birthDate;
-  apply.order = req.body.order;
-  apply.state = req.body.state;
+    await apply.save();
+    res.json({status: 200});
+  }catch(e) {
+    res.json({status: 500});
+  }
 
-  await apply.save();
-  res.json(apply);
-  
   
 });
 
@@ -83,12 +89,12 @@ exports.apply_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          phoneNumber : req.body.phoneNumber,
-          email : req.body.email,
-          name : req.body.name,
-          birthDate : req.body.birthDate,
-          order : req.body.order,
-          state : req.body.state,
+          phoneNumber : req.body.apply.phoneNumber,
+          email : req.body.apply.email,
+          name : req.body.apply.name,
+          birthDate : req.body.apply.birthDate,
+          order : req.body.apply.order,
+          state : req.body.apply.state,
         }
       }
     ).exec();
