@@ -123,16 +123,7 @@ exports.worker_create_post = asyncHandler(async (req, res, next) => {
     worker.accountTraining = accountTraining;
 
     await worker.save();
-    const worker_list = await Worker.find({})
-                      .populate('order')
-                      .populate({
-                        path: 'accountTraining',
-                        populate: {
-                          path: 'person'
-                        }
-                      })
-                      .exec();
-    res.status(200).send({status: 200, data: worker_list});
+    res.status(200).send({status: 200});
   }
 });
 

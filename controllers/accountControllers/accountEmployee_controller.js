@@ -49,10 +49,37 @@ exports.accountEmployee_create_post = asyncHandler(async (req, res, next) => {
   if(checkAccountExist) {
     res.status(409).json({ error: 'ID already exists' });
   }else{
-    const accountEmployee = new AccountEmployee();
-    const person = new Person(req.body.accountEmployee.person);
-    await person.save();
+    const p = req.body.accountEmployee.person
+    const person = new Person();
+    
+    person.name = p.name,
+    person.birthDate = p.birthDate,
+    person.phoneNumber = p.phoneNumber,
+    person.academicLevel = p.academicLevel,
+    person.anotherCertificates = p.anotherCertificates,
+    person.address = p.address,
+    person.associateContact = p.associateContact,
+    person.identifyCard = p.identifyCard != null ? p.identifyCard : null,
+    person.photo = person._id + "." + p.photoType;
+    const base64Data = p.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+    
+    const uploadPath = require('path').join(__dirname, '../../public', 'images','user', person.photo);
 
+    // Tạo một WriteStream để ghi dữ liệu vào tệp
+    const writeStream = fs.createWriteStream(uploadPath);
+    // Chuyển dữ liệu base64 thành Buffer
+    const bufferData = Buffer.from(base64Data, 'base64');
+    // Ghi dữ liệu vào tệp
+    writeStream.write(bufferData);
+    // Xử lý sự kiện lỗi
+    writeStream.on('error', (err) => {
+      console.error('Lỗi khi lưu tệp:', err);
+      res.status(500).json({ message: 'Lỗi khi lưu tệp' });
+    });
+    
+    await person.save();
+    
+    const accountEmployee = new AccountEmployee();
     accountEmployee.accountCode = req.body.accountEmployee.accountCode;
     accountEmployee.password = md5Hash(req.body.accountEmployee.password);
     accountEmployee.role = req.body.accountEmployee.role;
