@@ -127,9 +127,9 @@ exports.accountTraining_update_post = asyncHandler(async (req, res, next) => {
         }
       }
     ).exec();
-    const base64Data = p.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-
+    
     if(p.photoType) {
+      const base64Data = p.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
       const uploadPath = require('path').join(__dirname, '../../public', 'images','user', p._id + "." + p.photoType);
       // Tạo một WriteStream để ghi dữ liệu vào tệp
       const writeStream = fs.createWriteStream(uploadPath);
@@ -143,8 +143,7 @@ exports.accountTraining_update_post = asyncHandler(async (req, res, next) => {
         res.status(500).json({ message: 'Lỗi khi lưu tệp' });
       });
     }
-    const worker_list = await worker_controller.worker_list()
-    res.status(200).send({status: 200, data: worker_list});
+    res.json({status: 200});
   }
 });
 

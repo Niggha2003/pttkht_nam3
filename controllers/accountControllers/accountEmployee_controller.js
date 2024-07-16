@@ -1,4 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+
 const AccountEmployee = require("../../models/accountModels/accountEmployee");
+const Person = require("../../models/accountModels/person");
 
 const connectCreate = require('../../routes/connect');
 
@@ -46,14 +50,16 @@ exports.accountEmployee_create_post = asyncHandler(async (req, res, next) => {
     res.status(409).json({ error: 'ID already exists' });
   }else{
     const accountEmployee = new AccountEmployee();
+    const person = new Person(req.body.accountEmployee.person);
+    await person.save();
 
-    accountEmployee.accountCode = req.body.accountCode;
-    accountEmployee.password = md5Hash(req.body.password);
-    accountEmployee.role = req.body.role;
-    accountEmployee.person = req.body.person;
+    accountEmployee.accountCode = req.body.accountEmployee.accountCode;
+    accountEmployee.password = md5Hash(req.body.accountEmployee.password);
+    accountEmployee.role = req.body.accountEmployee.role;
+    accountEmployee.person = person;
   
     await accountEmployee.save();
-    res.json(accountEmployee);
+    res.json({status: 200});
   }
 
   
@@ -98,14 +104,46 @@ exports.accountEmployee_update_post = asyncHandler(async (req, res, next) => {
       {accountCode: checkAccountExist.accountCode},
       {$set: 
         {
-          accountCode : req.body.accountCode,
-          password : md5Hash(req.body.password),
-          role : req.body.role,
-          person : req.body.person,
+          accountCode : req.body.accountEmployee.accountCode,
+          password : req.body.accountEmployee.password,
+          role : req.body.accountEmployee.role,
         }
       }
     ).exec();
-    res.status(200).send({status: 200})
+    const p = req.body.accountEmployee.person;
+    await Person.updateOne(
+      {_id: p._id},
+      {$set: 
+        {
+          name: p.name,
+          birthDate: p.birthDate,
+          phoneNumber: p.phoneNumber,
+          academicLevel: p.academicLevel,
+          anotherCertificates: p.anotherCertificates,
+          address: p.address,
+          associateContact: p.associateContact,
+          identifyCard: p.identifyCard,
+          ...(p.photoType && { photo: p._id + "." + p.photoType }), // chỉ cập nhật photo mới nếu có photoType được gửi đi
+        }
+      }
+    ).exec();
+    
+    if(p.photoType) {
+      const base64Data = p.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+      const uploadPath = require('path').join(__dirname, '../../public', 'images','user', p._id + "." + p.photoType);
+      // Tạo một WriteStream để ghi dữ liệu vào tệp
+      const writeStream = fs.createWriteStream(uploadPath);
+      // Chuyển dữ liệu base64 thành Buffer
+      const bufferData = Buffer.from(base64Data, 'base64');
+      // Ghi dữ liệu vào tệp
+      writeStream.write(bufferData);
+      // Xử lý sự kiện lỗi
+      writeStream.on('error', (err) => {
+        console.error('Lỗi khi lưu tệp:', err);
+        res.status(500).json({ message: 'Lỗi khi lưu tệp' });
+      });
+    }
+    res.json({status: 200});
   }
 
   
