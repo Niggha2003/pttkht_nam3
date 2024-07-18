@@ -27,7 +27,7 @@ const orderSchema = new Schema({
             validator: function(obj) {
                 return obj.hasOwnProperty('female') && obj.hasOwnProperty('male') 
             },
-            message: "Cần nhập cả giá trị chiều cao và giới tính"
+            message: "Cần nhập cả giá trị cho nam và nữ"
         }
     },
     weightRequire: {
@@ -37,7 +37,7 @@ const orderSchema = new Schema({
             validator: function(obj) {
                 return obj.hasOwnProperty('female') && obj.hasOwnProperty('male') 
             },
-            message: "Cần nhập cả giá trị cân nặng và giới tính"
+            message: "Cần nhập cả giá trị cho nam và nữ"
         }
     },
     bodyRequire: {
@@ -56,20 +56,21 @@ const orderSchema = new Schema({
         // cơ sở, phổ thông, cao đẳng, đại học
         enum: ["cs", "pt", "cd" ,"dh"]
     },
+    // lương thực tế /1000
     salary: {type: Number, required: true},
     timePosted: {type: Date, default: new Date()},
     timeNeeded: {type: Date, required: true},
     state: {
         type: String, 
         required: true,
-        enum: ["hap", "training", "ipg", "completed"],
-        // haven't apply, đang đào tạo, inprogress, đã hoàn thành
-        default: "hap",
+        enum: ["inprogress", "completed"],
+        // inprogress, đã hoàn thành
+        default: "inprogress",
     },
     type: {
         type: String, 
         required: true,
-        // cơ khí, dệt may, ô sin, bốc vác
+        // cơ khí, dệt may, giúp việc, làm nông
         enum: ["ck", "dm", "os" ,"bv"]
     },
     employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},

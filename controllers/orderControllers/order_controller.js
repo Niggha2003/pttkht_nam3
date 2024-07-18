@@ -9,7 +9,6 @@ const asyncHandler = require("express-async-handler");
 // Display list of all orders.
 exports.order_list = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
-console.log(req.query)
   let order_list;
   if(req.query && req.query != {}) {
     order_list = 
