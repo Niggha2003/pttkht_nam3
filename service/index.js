@@ -4,6 +4,7 @@ const upload_image = require('./upload_image');
 const get_image = require('./get_image');
 const set_introduce = require('./set_introduce');
 const set_infoCompany = require('./set_infoCompany');
+const get_file = require('./get_file');
 
 const services = {
     login,
@@ -11,7 +12,8 @@ const services = {
     upload_image,
     get_image,
     set_introduce,
-    set_infoCompany
+    set_infoCompany,
+    get_file
 }
 
 module.exports = services;

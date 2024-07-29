@@ -30,7 +30,6 @@ const uploadImage = (dirName, type = 'single') => {
 }
 
 router.post('/paragraph', uploadImage('paragraph'), (req, res, next) => {
-    console.log(req.file, req.files)
     if(req.files){
       imageUrls = req.files.map(file => `http://localhost:5000/images/paragraph/${req.file.filename}`)
       res.json({imageUrls: imageUrls})

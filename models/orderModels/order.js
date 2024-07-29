@@ -74,7 +74,7 @@ const orderSchema = new Schema({
         enum: ["ck", "dm", "os" ,"bv"]
     },
     employee: {type: Schema.Types.ObjectId, ref: AccountEmployee, required: true},
-    paragraph: {type: String, required: true},
+    paragraph: {type: String, default: "Chưa có đoạn văn cho đơn hàng"},
     isHot: {type: Boolean, required: true, default: false},
     photo: {type: String, required: true}
 })

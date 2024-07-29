@@ -66,11 +66,14 @@ exports.order_create_post = asyncHandler(async (req, res, next) => {
   order.state = req.body.order.state;
   order.type = req.body.order.type;
   order.employee = req.body.order.employee;
-  order.paragraph = req.body.order.paragraph;
   order.isHot = req.body.order.isHot;
   order.photo = order._id + "." + req.body.order.photoType;
-  order.orderCode = req.body.order.orderCode;
+  order.orderCode = `${req.body.order.type}${order._id}`;
   order.orderName= req.body.order.orderName;
+
+  if(req.body.order.paragraph){
+    order.paragraph = req.body.order.paragraph;
+  }
   
   const base64Data = req.body.order.photo.replace(/^data:([A-Za-z-+/]+);base64,/, '');
 
@@ -89,7 +92,7 @@ exports.order_create_post = asyncHandler(async (req, res, next) => {
   });
 
   await order.save();
-  res.status(200).send({status: 'create success'})
+  res.json({status: 200})
   
   
 });
@@ -125,7 +128,6 @@ exports.order_update_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
   
   const checkOrderExist = await Order.findById(req.params.id).exec();
-
   if(!checkOrderExist) {
     res.status(404).json({ error: 'ID not exists' });
   }else{
@@ -133,7 +135,6 @@ exports.order_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          orderCode : req.body.order.orderCode,
           orderName: req.body.order.orderName,
           companyName : req.body.order.companyName,
           companyAddress : req.body.order.companyAddress,
@@ -165,13 +166,16 @@ exports.order_update_post = asyncHandler(async (req, res, next) => {
       const bufferData = Buffer.from(base64Data, 'base64');
       // Ghi dữ liệu vào tệp
       writeStream.write(bufferData);
+      // Đảm bảo rằng tệp được đóng sau khi ghi xong
+      writeStream.end();
       // Xử lý sự kiện lỗi
       writeStream.on('error', (err) => {
         console.error('Lỗi khi lưu tệp:', err);
         res.status(500).json({ message: 'Lỗi khi lưu tệp' });
       });
+
     }
-    res.status(200).send({status: 200})
+    res.json({status: 200})
   }
 
   

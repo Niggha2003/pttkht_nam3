@@ -32,7 +32,6 @@ exports.apply_create_get = asyncHandler(async (req, res, next) => {
 // Handle apply create on POST.
 exports.apply_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
-  console.log(req.body.apply)
   try{
     const apply = new Apply(); 
     apply.phoneNumber = req.body.apply.phoneNumber;
@@ -89,16 +88,12 @@ exports.apply_update_post = asyncHandler(async (req, res, next) => {
       {_id: req.params.id},
       {$set: 
         {
-          phoneNumber : req.body.apply.phoneNumber,
-          email : req.body.apply.email,
-          name : req.body.apply.name,
-          birthDate : req.body.apply.birthDate,
-          order : req.body.apply.order,
-          state : req.body.apply.state,
+          ...(req.body.state != null && {state : req.body.state, timeModify: req.body.timeModify}),
+          ...(req.body.portfolio != null && {portfolio : req.body.portfolio}),
         }
       }
     ).exec();
-    res.status(200).send({status: 200})
+    res.status(200).json({status: 200})
   }
 
   
