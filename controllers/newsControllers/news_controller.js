@@ -37,8 +37,11 @@ exports.news_create_post = asyncHandler(async (req, res, next) => {
     news.content = req.body.news.content;
     news.pictureBase64 =  req.body.news.pictureBase64;
     news.type = req.body.news.type;
-    news.paragraph = req.body.news.paragraph;
+    news.isForeignNews = req.body.news.isForeignNews;
 
+    if(req.body.news.paragraph) {
+      news.paragraph = req.body.news.paragraph;
+  }
     if(req.body.news.timeOutstandingRelease) {
         news.timeOutstandingRelease = req.body.news.timeOutstandingRelease;
     }
@@ -48,12 +51,9 @@ exports.news_create_post = asyncHandler(async (req, res, next) => {
     if(req.body.news.showOnHome != null) {
       news.showOnHome = req.body.news.showOnHome;
     }
-    if(req.body.news.isForeignNews) {
-      news.isForeignNews = req.body.news.isForeignNews;
-    }
 
     await news.save();
-    res.json(news);
+    res.json({status: 200});
 
 });
 
@@ -99,16 +99,15 @@ exports.news_update_post = asyncHandler(async (req, res, next) => {
             title :  req.body.news.title,
             content : req.body.news.content,
             pictureBase64 : req.body.news.pictureBase64,
-            type : req.body.news.type,
             paragraph : req.body.news.paragraph,
             ...(req.body.news.timeOutstandingRelease && {timeOutstandingRelease : req.body.news.timeOutstandingRelease}),
             ...(req.body.news.focalTitle && {focalTitle : req.body.news.focalTitle}),
-            ...(req.body.news.showOnHome != null && {showOnHome : req.body.news.showOnHome}),
-            ...(req.body.news.isForeignNews && {isForeignNews : req.body.news.isForeignNews}),
+
+            ...(req.body.showOnHome != null && {showOnHome : req.body.showOnHome}),
         }
       }
     ).exec();
 
-    res.status(200).send({status: 200})
+    res.status(200).json({status: 200})
   }
 });
