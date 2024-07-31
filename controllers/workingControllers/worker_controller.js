@@ -174,7 +174,6 @@ exports.worker_update_post = asyncHandler(async (req, res, next) => {
           }
         }
       ).exec();
-      console.log(10)
       const worker_list = await Worker.find({})
                         .populate('order')
                         .populate({

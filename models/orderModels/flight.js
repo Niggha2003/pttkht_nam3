@@ -17,6 +17,7 @@ const flightSchema = new Schema({
     airlineGateway: {type: String, required: true},
     flightSeat: {type: String, required: true},
     worker: {type: Schema.Types.ObjectId, ref: Worker, required: true},
+    pictureBase64: {type: String, required: true},
 })
 
 flightSchema.virtual('url').get(function() {

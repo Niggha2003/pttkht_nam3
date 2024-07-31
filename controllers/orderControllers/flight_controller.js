@@ -16,7 +16,16 @@ exports.flight_list = asyncHandler(async (req, res, next) => {
       res.json(flight_detail);
     }
   }else{
-    const flight_list = await Flight.find({}).exec();
+    const flight_list = await Flight.find({})
+                                    .populate({
+                                      path: 'worker',
+                                      populate: {
+                                        path: 'accountTraining',
+                                        populate: {
+                                          path: 'person'
+                                        }
+                                      }
+                                    }).exec();
     res.json(flight_list);
   }
 });
@@ -39,18 +48,19 @@ exports.flight_create_post = asyncHandler(async (req, res, next) => {
   connectCreate.connect();
 
   const flight = new Flight(); 
-  flight.airlineName = req.body.airlineName;
-  flight.flightNumber = req.body.flightNumber;
-  flight.ticketClass = req.body.ticketClass;
-  flight.from = req.body.from;
-  flight.to = req.body.to;
-  flight.time = req.body.time;
-  flight.airlineGateway = req.body.airlineGateway;
-  flight.flightSeat = req.body.flightSeat;
-  flight.worker = req.body.workerId;
+  flight.airlineName = req.body.flight.airlineName;
+  flight.flightNumber = req.body.flight.flightNumber;
+  flight.ticketClass = req.body.flight.ticketClass;
+  flight.from = req.body.flight.from;
+  flight.to = req.body.flight.to;
+  flight.time = req.body.flight.time;
+  flight.airlineGateway = req.body.flight.airlineGateway;
+  flight.flightSeat = req.body.flight.flightSeat;
+  flight.worker = req.body.flight.worker;
+  flight.pictureBase64 = req.body.flight.pictureBase64;
 
   await flight.save();
-  res.status(200).send({status: 'create success'})
+  res.status(200).json({status: 200})
   
 });
 
