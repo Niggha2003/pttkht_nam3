@@ -1,18 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path');
-
+const PDFDocument = require('pdfkit');
+const blobStream  = require('blob-stream');
+const fs = require('fs');
 const multer = require('multer');
 
 
-router.get('/', (req, res, next) => {
-    const getPath = path.join(__dirname, '../private', req.query.dirName);
 
-    res.sendFile(path.join(getPath, req.query.fileName));
+router.get('/', (req, res, next) => {
+    res.json({url : `http://localhost:5000/${req.query.dirName}/${req.query.fileName}`});
 })
 
 const uploadFile = (dirName, fileName, type = 'single') => {
-    const uploadPath = require('path').join(__dirname, '../private', dirName);
+    const uploadPath = require('path').join(__dirname, '../public', dirName);
 
     // Cấu hình storage cho multer
     const storage = multer.diskStorage({

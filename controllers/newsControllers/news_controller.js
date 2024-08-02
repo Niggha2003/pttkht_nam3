@@ -92,22 +92,28 @@ exports.news_update_post = asyncHandler(async (req, res, next) => {
   if(!checkNewsExist) {
     res.status(404).json({ error: 'ID not exists' });
   }else{
-    await News.updateOne(
-      {_id: req.params.id},
-      {$set: 
-        {
-            title :  req.body.news.title,
-            content : req.body.news.content,
-            pictureBase64 : req.body.news.pictureBase64,
-            paragraph : req.body.news.paragraph,
-            ...(req.body.news.timeOutstandingRelease && {timeOutstandingRelease : req.body.news.timeOutstandingRelease}),
-            ...(req.body.news.focalTitle && {focalTitle : req.body.news.focalTitle}),
-
-            ...(req.body.showOnHome != null && {showOnHome : req.body.showOnHome}),
-        }
-      }
-    ).exec();
-
+    if(req.body.news) {
+      await News.updateOne(
+        {_id: req.params.id},
+        {$set: 
+          {
+              title :  req.body.news.title,
+              content : req.body.news.content,
+              pictureBase64 : req.body.news.pictureBase64,
+              paragraph : req.body.news.paragraph,
+              ...(req.body.news.timeOutstandingRelease && {timeOutstandingRelease : req.body.news.timeOutstandingRelease}),
+              ...(req.body.news.focalTitle && {focalTitle : req.body.news.focalTitle}),
+          }
+        }).exec();
+    }else{
+      await News.updateOne(
+        {_id: req.params.id},
+        {$set: 
+          {
+              ...(req.body.showOnHome != null && {showOnHome : req.body.showOnHome}),
+          }
+        }).exec();
+    }
     res.status(200).json({status: 200})
   }
 });
