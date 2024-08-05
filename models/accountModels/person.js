@@ -40,6 +40,7 @@ const personSchema = new Schema({
         }
     },
     identifyCard: {type: String, required: true},
+    email: {type: String, required: true}
 });
 
 personSchema.virtual('url').get(function() {

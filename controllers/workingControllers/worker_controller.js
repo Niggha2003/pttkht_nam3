@@ -76,6 +76,7 @@ exports.worker_create_post = asyncHandler(async (req, res, next) => {
     person.academicLevel = p.academicLevel,
     person.anotherCertificates = p.anotherCertificates,
     person.address = p.address,
+    person.email = p.email,
     person.associateContact = p.associateContact,
     person.identifyCard = p.identifyCard != null ? p.identifyCard : null,
     person.photo = person._id + "." + p.photoType;

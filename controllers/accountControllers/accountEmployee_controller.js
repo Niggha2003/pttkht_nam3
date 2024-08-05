@@ -58,6 +58,7 @@ exports.accountEmployee_create_post = asyncHandler(async (req, res, next) => {
     person.academicLevel = p.academicLevel,
     person.anotherCertificates = p.anotherCertificates,
     person.address = p.address,
+    person.email = p.email,
     person.associateContact = p.associateContact,
     person.identifyCard = p.identifyCard != null ? p.identifyCard : null,
     person.photo = person._id + "." + p.photoType;
@@ -148,6 +149,7 @@ exports.accountEmployee_update_post = asyncHandler(async (req, res, next) => {
           academicLevel: p.academicLevel,
           anotherCertificates: p.anotherCertificates,
           address: p.address,
+          email: p.email,
           associateContact: p.associateContact,
           identifyCard: p.identifyCard,
           ...(p.photoType && { photo: p._id + "." + p.photoType }), // chỉ cập nhật photo mới nếu có photoType được gửi đi

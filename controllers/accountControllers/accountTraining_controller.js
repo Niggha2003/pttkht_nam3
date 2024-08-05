@@ -121,6 +121,7 @@ exports.accountTraining_update_post = asyncHandler(async (req, res, next) => {
           academicLevel: p.academicLevel,
           anotherCertificates: p.anotherCertificates,
           address: p.address,
+          email: p.email,
           associateContact: p.associateContact,
           identifyCard: p.identifyCard,
           ...(p.photoType && { photo: p._id + "." + p.photoType }), // chỉ cập nhật photo mới nếu có photoType được gửi đi

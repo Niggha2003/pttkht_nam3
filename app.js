@@ -59,6 +59,9 @@ app.use('/api/info', service.set_infoCompany);
 // lấy 1 file
 app.use('/api/file', service.get_file);
 
+// gửi mail
+app.use('/api/send_email', service.send_email);
+
 app.use('/', createProxyMiddleware({ 
   target: 'http://localhost:5173', // FE server port
   changeOrigin: true,
